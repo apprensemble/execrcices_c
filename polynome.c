@@ -52,36 +52,29 @@ int main () {
 
   }
 
-  /* que fait cette fonction? */
   polynome copyPolynome(polynome P) {
-    polynome C,S; //Courant,Suivant
+    polynome tete_de_liste,suivant; 
     int i = 0;
+    tete_de_liste = polynomeconstructeur(P->coeff,P->degre,NULL);
+    P = P->monome_suivant;
     while (P != NULL) {
-      if (i == 1) {
-	S = C->monome_suivant = polynomeconstructeur(P->coeff,P->degre,NULL);
-	//S = C->monome_suivant;
-      }
-      else if (i==0) {
-	C = polynomeconstructeur(P->coeff,P->degre,NULL);
+      if (i == 0) {
+	suivant = tete_de_liste->monome_suivant = polynomeconstructeur(P->coeff,P->degre,NULL);
+	i++;
       }
       else {
-	S = S->monome_suivant = polynomeconstructeur(P->coeff,P->degre,NULL);
-	//S = S->monome_suivant;
+	suivant = suivant->monome_suivant = polynomeconstructeur(P->coeff,P->degre,NULL);
       }
-      i++;
 	P = P->monome_suivant;
     }
-    return C;
+    return tete_de_liste;
   }
 
   polynome copyPolynomeR(polynome P) {
-    polynome Q;
+    polynome Q = NULL;
 
     if (P != NULL) {
       Q = polynomeconstructeur(P->coeff,P->degre,copyPolynomeR(P->monome_suivant));
-    }
-    else {
-      Q = NULL;
     }
     return Q;
   }
@@ -107,6 +100,7 @@ Q = copyPolynomeR(D);
   printf ("\nplus haut degre version Recursive  Q : %d\n\n\n",degreR(Q));
   printf ("\nplus haut degre R : %d\n",degre(R));
   printf ("\nplus haut degre version Recursive  R : %d\n",degreR(R));
+printf(" %dx\xB1",R->coeff,R->degre);
 
 
 }
