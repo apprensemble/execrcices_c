@@ -29,12 +29,9 @@ int main () {
       if (iterateur->degre > deg) {
 	deg = iterateur->degre;
       }
-	iterateur = iterateur->monome_suivant;
-
-
+      iterateur = iterateur->monome_suivant;
     }
     return deg;
-
   }
 
   int degreR (polynome P) {
@@ -48,24 +45,22 @@ int main () {
       }
       return deg;
     }
-
-
   }
 
   polynome copyPolynome(polynome P) {
     polynome tete_de_liste,suivant; 
-    int i = 0;
+    int debut = 1;
     tete_de_liste = polynomeconstructeur(P->coeff,P->degre,NULL);
     P = P->monome_suivant;
     while (P != NULL) {
-      if (i == 0) {
+      if (debut) {
 	suivant = tete_de_liste->monome_suivant = polynomeconstructeur(P->coeff,P->degre,NULL);
-	i++;
+	debut = 0;
       }
       else {
 	suivant = suivant->monome_suivant = polynomeconstructeur(P->coeff,P->degre,NULL);
       }
-	P = P->monome_suivant;
+      P = P->monome_suivant;
     }
     return tete_de_liste;
   }
@@ -79,7 +74,7 @@ int main () {
     return Q;
   }
 
-  polynome M,N,O,P,Q,R,A,B,C,D;
+  polynome M,N,O,P,Q,R,A,B,C,D,E;
   int mon_deg;
 
   N = polynomeconstructeur(2,4,NULL);
@@ -91,8 +86,9 @@ int main () {
   C = polynomeconstructeur(3,16,B);
   D = polynomeconstructeur(4,10,C);
 
-R = copyPolynome(D);
-Q = copyPolynomeR(D);
+  R = copyPolynome(D);
+  Q = copyPolynomeR(D);
+  E = copyPolynome(R);
 
   printf ("\nplus haut degre D : %d\n",degre(D));
   printf ("\nplus haut degre version Recursive  D : %d\n\n\n",degreR(D));
@@ -100,7 +96,9 @@ Q = copyPolynomeR(D);
   printf ("\nplus haut degre version Recursive  Q : %d\n\n\n",degreR(Q));
   printf ("\nplus haut degre R : %d\n",degre(R));
   printf ("\nplus haut degre version Recursive  R : %d\n",degreR(R));
-printf(" %dx\xB1",R->coeff,R->degre);
+  printf ("\nplus haut degre E : %d\n",degre(E));
+  printf ("\nplus haut degre version Recursive  E : %d\n",degreR(E));
+  printf(" %dx\xB1",R->coeff,R->degre);
 
 
 }
