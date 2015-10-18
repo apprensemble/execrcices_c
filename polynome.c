@@ -47,9 +47,27 @@ int main () {
     }
   }
 
+  polynome copyPolynomeI(polynome P) {
+    polynome prec = NULL;
+    polynome suiv = NULL;
+
+    if (P != NULL) {
+      prec = polynomeconstructeur(P->coeff,P->degre,NULL);
+      P = P->monome_suivant;
+    }
+    while (P != NULL) {
+      suiv = polynomeconstructeur(P->coeff,P->degre,prec);
+      prec = suiv;
+      P = P->monome_suivant;
+    }
+    return prec;
+  }
+
   polynome copyPolynome(polynome P) {
     polynome tete_de_liste,suivant; 
     int debut = 1;
+    /*je suppose que P n'est pas NULL au debut sinon revenir a la version precedente 
+     * ou je supposait qu'il pouvait etre null ça ajoute 2 lignes */
     tete_de_liste = polynomeconstructeur(P->coeff,P->degre,NULL);
     P = P->monome_suivant;
     while (P != NULL) {
@@ -74,7 +92,27 @@ int main () {
     return Q;
   }
 
-  polynome M,N,O,P,Q,R,A,B,C,D,E;
+  polynome ordonnePolynome(polynome P) {
+    /* le mieux me semble de creer une nouvelle liste soit le tri par insertion
+     * P reste la tete de liste, I pour l'iteration et Q pour la nouvelle liste Q comme Qew euh... New :p
+     * Ajout monome en tete de liste
+     * ajout monome comme successeur */
+    polynome I,Q = NULL;
+    I = Q = P;
+    I = I->monome_suivant;
+    while (I != NULL) {
+      if (I->degre > Q->degre);
+      
+
+
+    }
+    return Q;
+
+
+
+  }
+
+  polynome M,N,O,P,Q,R,A,B,C,D,E,F;
   int mon_deg;
 
   N = polynomeconstructeur(2,4,NULL);
@@ -89,6 +127,7 @@ int main () {
   R = copyPolynome(D);
   Q = copyPolynomeR(D);
   E = copyPolynome(R);
+  F = copyPolynomeI(R);
 
   printf ("\nplus haut degre D : %d\n",degre(D));
   printf ("\nplus haut degre version Recursive  D : %d\n\n\n",degreR(D));
@@ -98,6 +137,8 @@ int main () {
   printf ("\nplus haut degre version Recursive  R : %d\n",degreR(R));
   printf ("\nplus haut degre E : %d\n",degre(E));
   printf ("\nplus haut degre version Recursive  E : %d\n",degreR(E));
+  printf ("\nplus haut degre F : %d\n",degre(F));
+  printf ("\nplus haut degre version Recursive  F : %d\n",degreR(F));
   printf(" %dx\xB1",R->coeff,R->degre);
 
 
