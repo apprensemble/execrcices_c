@@ -127,6 +127,35 @@ void tri_rapide (int L[],int position,int taille) {
   }
 }
 
+void tri_par_bulle (int tab[],int taille) {
+  int g,d;//pour gauche et droit
+  int i; //indice
+  int nbr_echange=0; // on s'arrete quand il n'y a plus d'echanges
+
+  while (1) { //on va defiler indefiniement
+    for (i=0;i<taille;i++) {
+      g = tab[i];
+      d = tab[i+1];
+      if (g>d) {
+      affiche_tableau(tab,6);
+	printf("indice %d echange %d et %d\n",i,g,d);
+	echanger(tab,i,i+1);
+	nbr_echange++;
+      }
+    }
+    if (nbr_echange == 0) {
+	printf("fin a indice %d echange %d et %d\n",i,g,d);
+	break;
+    }
+    else {
+      affiche_tableau(tab,6);
+      printf("nbr_ech %d\n",nbr_echange);
+      nbr_echange = 0;
+    }
+  }
+}
+
+
 
 
 a = tri_par_denombrement(a);
@@ -150,4 +179,16 @@ int tab3[6] = {1,5,2,5,9,7};
 affiche_tableau(tab3,6);
 tri_rapide(tab3,0,5);
 affiche_tableau(tab3,6);
+
+int tab4[6] = {1,5,2,5,9,7};
+affiche_tableau(tab4,6);
+tri_par_bulle(tab4,5);
+affiche_tableau(tab4,6);
+printf("\n\n");
+
+int tab5[6] = {5,4,3,2,1,0};
+affiche_tableau(tab5,6);
+tri_par_bulle(tab5,5);
+affiche_tableau(tab5,6);
+
 }
