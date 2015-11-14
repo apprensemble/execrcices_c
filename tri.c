@@ -38,7 +38,10 @@ int main() {
 
   }
 
+
   liste a,b,c,d,e,f,g;
+
+  g=NULL;
 
   f = listecons(7,g);
   e = listecons(9,f);
@@ -72,11 +75,11 @@ liste tri_par_denombrement (liste L) {
   i=0;
   while (L != NULL) {
     i = L -> cle;
-    tab[i]++;
+    tab[i]++;//tab[i] = tab[i]+1;
     L = L->successeur;
   }
   i=max+1;
-  while (i-->0) {
+  while (i-- > 0) { //tant que i>0; i=i-1;
     while (tab[i]-- > 0) {
       a = listecons(i,a);
     }
@@ -178,6 +181,7 @@ affiche_tableau(tab2,3);
 int tab3[6] = {1,5,2,5,9,7};
 affiche_tableau(tab3,6);
 tri_rapide(tab3,0,5);
+
 affiche_tableau(tab3,6);
 
 int tab4[6] = {1,5,2,5,9,7};
