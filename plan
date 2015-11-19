@@ -1,0 +1,20 @@
+PLAN
+====
+
+# arguments en ligne de commande
+# pointeurs
+    # pointeur primitives
+    # pointeur de strings (**char)
+    # pointeur de pointeurs
+    # pointeur de fonction (optionnel)
+# Entrees/Sorties
+    * getchar/putchar
+    * readlines/putlines
+    * scanf/printf
+    * open/opendir
+    * read/readdir
+# Socket
+    * client
+    * serveur
+# fork
+# thread (optionnel)
