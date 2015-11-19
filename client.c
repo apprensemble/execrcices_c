@@ -6,23 +6,25 @@
 #include <arpa/inet.h>
 //quasi copier/coller de http://www.binarytides.com/socket-programming-c-linux-tutorial/
 int main (int argc, char *argv[]) {
-int mon_socket;
+int ma_socket;
 struct sockaddr_in server;
 char *message, reponse_server[2000];
 
-mon_socket = socket(AF_INET , SOCK_STREAM , 0);
+//definition de la cible
+server.sin_addr.s_addr = inet_addr("127.0.0.1");
+server.sin_family = AF_INET;
+server.sin_port = htons(2080);
 
-if (mon_socket == -1) {
+//creation de la socket
+ma_socket = socket(AF_INET , SOCK_STREAM , 0);
+
+if (ma_socket == -1) {
   printf("impossible de creer ton socket de merde");
 
 }
 
-server.sin_addr.s_addr = inet_addr("172.17.0.41");
-server.sin_family = AF_INET;
-server.sin_port = htons(80);
-
-//Connect to remote server
-if (connect(mon_socket , (struct sockaddr *)&server , sizeof(server)) < 0)
+//connexion vers le serveur distant
+if (connect(ma_socket , (struct sockaddr *)&server , sizeof(server)) < 0)
 {
 
 puts("erreur de connexion");
@@ -30,9 +32,9 @@ return 1;
 }
 
 puts("connexion active");
-
+//envoie d'une requete HTTP GET
 message = "GET / HTTP 1.1 \r\n\r\n";
-if (send(mon_socket , message, strlen(message) , 0) < 0)
+if (send(ma_socket , message, strlen(message) , 0) < 0)
 {
   puts ("echec envoie");
   return 1;
@@ -40,23 +42,16 @@ if (send(mon_socket , message, strlen(message) , 0) < 0)
 }
 puts("envoie reussi\n");
 
-//reception
-//while (recv(mon_socket, reponse_server, 200, 0) > 0) {
+//reception du resultat de la requete
+
 int n;
-while ((n=read(mon_socket, reponse_server, 200))>0) {
+while ((n=read(ma_socket, reponse_server, 2000))>0) {
   //printf("lu : %d\n",n);
 write(1,reponse_server,n);
-//return 1;
 }
-//puts(reponse_server);
 
-//read(mon_socket, reponse_server, 2000);
-close(mon_socket);
-
-
-
+close(ma_socket);
 
 return 0;
-
 
 }
