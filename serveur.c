@@ -55,6 +55,7 @@ while ((n=read(ta_socket, reponse_server, 1))>0) {
   //printf("lu : %d\n",n);
 write(1,reponse_server,n);
 }
+//fermeture des connexions
 close(client);
 close(server);
 
