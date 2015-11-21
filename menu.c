@@ -2,20 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include "menu.h"
+#include "gestion_message.h"
 int banniere(char *nom) {
+  char message[1024];
   if (nom == NULL) {
     nom = "sombre inconnu";
-
   }
-  printf("Bienvenue %s\n",nom); 
-  printf("---------\n\n"); 
+  strcat(message,"Bienvenue ");
+  strcat(message,nom);
+  strcat(message,"\n");
+  strcat(message,"--------\n\n"); 
+  set_message(message);
 }
 int menu() {
-  printf("menu : \n"); 
-  printf("1.liste des referentiels\n"); 
-  printf("2.contenu d'un referentiel\n"); 
-  printf("3.telechargement d'un referentiel\n"); 
-  printf("4.quitter\n");
+  char message[200] = "menu : \n 1.liste des referentiels\n2.contenu d'un referentiel\n3.telechargement d'un referentiel\n4.quitter\n";
+  set_message(message);
+  return 0;
 }
 void clean_stdin() {
   int c;

@@ -1,12 +1,16 @@
 ##Makefile de debutant
 
-menu : ls.o menu.o main_menu.o
-	gcc -o menu menu.o main_menu.o ls.o
-main_menu.o : main_menu.c menu.h
-	gcc -c -O3 main_menu.c
+serveur : gestion_message.o ls.o menu.o serveur.c client
+	gcc serveur.c -o serveur menu.o ls.o gestion_message.o
 menu.o : menu.c menu.h
 	gcc -c -O3 menu.c
 ls.o : ls.c ls.h
 	gcc -c -O3 ls.c
-clean : 
-	rm menu.o main_menu.o menu
+gestion_message.o : gestion_message.c gestion_message.h
+	gcc -c -O3 gestion_message.c
+client : client.c 
+	gcc client.c -o client menu.o ls.o
+clean_socket :
+	rm serveur client
+clean : clean_socket
+	rm menu.o main_menu.o ls.o menu

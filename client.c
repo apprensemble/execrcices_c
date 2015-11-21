@@ -33,7 +33,10 @@ return 1;
 
 puts("connexion active");
 //envoie d'une requete HTTP GET
-message = "GET / HTTP 1.1 \r\n\r\n";
+if (argv[1] == NULL) {
+  message = "JAMES KIRK";
+}
+  else message=argv[1];
 if (send(ma_socket , message, strlen(message) , 0) < 0)
 {
   puts ("echec envoie");

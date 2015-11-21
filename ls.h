@@ -8,5 +8,5 @@
 #define LS_FIC
 #define TLIM 1000 //limite du tampax
 int lecture(char *nom_de_fichier);
-int liste_fichiers(char *rep);
+int liste_fichiers(char *rep,int *fd);
 #endif

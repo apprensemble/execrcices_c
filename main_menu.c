@@ -1,7 +1,7 @@
 #include "menu.h"
 #include "ls.h"
-int liste_referentiels() {
-  liste_fichiers(".");
+int liste_referentiels(int *fd) {
+  liste_fichiers(".",fd);
 
 }
 int action_referentiel(int choix) {
@@ -29,6 +29,7 @@ int action_referentiel(int choix) {
 
 
 int main (int argc,char **argv) {
+  int fd = 1;
   banniere(argv[1]);
   int c =1;
   char *message[200];
@@ -36,7 +37,7 @@ int main (int argc,char **argv) {
     menu();
     switch (c=choix()) {
       case 1 :
-	liste_referentiels();
+	liste_referentiels(&fd);
 	break;
       case 2 :
 	action_referentiel(c);
