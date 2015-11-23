@@ -4,7 +4,7 @@
 #include "menu.h"
 #include "gestion_message.h"
 int banniere(char *nom) {
-  char message[1024];
+  char message[TLIM];
   if (nom == NULL) {
     nom = "sombre inconnu";
   }
@@ -15,7 +15,8 @@ int banniere(char *nom) {
   set_message(message);
 }
 int menu() {
-  char message[200] = "menu : \n 1.liste des referentiels\n2.contenu d'un referentiel\n3.telechargement d'un referentiel\n4.quitter\n";
+  char message[TLIM];
+  strcpy(message,"\n\nmenu : \n1.liste des referentiels\n2.contenu d'un referentiel\n3.telechargement d'un referentiel\n4.quitter\n");
   set_message(message);
   return 0;
 }

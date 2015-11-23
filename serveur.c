@@ -56,8 +56,6 @@ return ma_socket;
 }
 
 creation_canal(int ma_socket,int *ta_socket,struct sockaddr_in *client) {
-  pid_t pid = fork();
-  if (pid == 0) {
     int client_size = sizeof client;
     //a present on prend en charge les connexions
     *ta_socket = accept(ma_socket,(struct sockaddr *)client,&client_size);
@@ -65,38 +63,89 @@ creation_canal(int ma_socket,int *ta_socket,struct sockaddr_in *client) {
       perror("change ta socket\n");
       exit(errno);
     }
-  }
-  else if (pid == -1) {
-    perror("impossible de forker\n");
-    exit(errno);
-  }
-  return pid;
+}
+
+int ecriture_s(int ta_socket) {
+  char message[TLIM];
+  strcpy(message,get_message());
+  //ajouter un mode debug?
+  //printf("strlen message : %d\n%s\n",strlen(message),message);
+  write(ta_socket,message,strlen(message));
+}
+int lecture_s(int ta_socket) {
+  char message[TLIM];
+  char garde_message[TLIM];
+  int n;
+  if ((n=read(ta_socket, message, TLIM))>0) strncpy(garde_message,message,n);
+  else strcpy(garde_message,"pas de reponse");
+  set_message(garde_message);
 }
 
 //c'est le vrai main. le coeur du service
-int lancement_service(int ma_socket,int ta_socket,struct sockaddr_in *client) {
+int lancement_service(int ta_socket) {
   int n;
-  char message[256];
-  char nom[20];
-  if ((n=read(ta_socket, message, 256))>0) strcpy(nom,message);
+  int choix;
+  choix = 1;
+  char message[TLIM] = "";
+  char reponse[TLIM] = "";
+  char nom[20] = "";
+  if ((n=read(ta_socket, message, TLIM))>0) strncpy(nom,message,n);
   else strcpy(nom,"sombre inconnu");
-  strcpy(message,"bonjour ");
-  strcat(message,nom);
-  write(ta_socket,message,strlen(message));
-  menu;
-  strcpy(message,get_message());
-  write(ta_socket,message,strlen(message));
-  //while ((n=read(ta_socket, message, 256))>0) {
-  //printf("%s",message);
-  //write(ta_socket,message,strlen(message));
-  //}
+  banniere(nom);
+  ecriture_s(ta_socket);
+  while (lecture("menu.txt")) {
+    ecriture_s(ta_socket);
+  }
+  while (choix) {
+  lecture_s(ta_socket);
+  if (sscanf(get_message(),"%d",&choix)>0) {
+    switch(choix) {
+      case 1 : 
+	while (liste_fichiers("refs")) {
+	  ecriture_s(ta_socket);
+	}
+	break;
+      case 2 : 
+	strcpy(message,"quel referentiel? ");
+	set_message(message);
+	ecriture_s(ta_socket);
+	lecture_s(ta_socket);
+	if (sscanf(get_message(),"%s",&message)>0) {
+	chdir("refs");
+	while (lecture(message)) {
+	  ecriture_s(ta_socket);
+	}
+	chdir("..");
+	}
+	break;
+      case 3 :
+	strcpy(message,"virus LOADED!!!");
+	set_message(message);
+	ecriture_s(ta_socket);
+	break;
+      case 4 : 
+	choix = 0;
+	strcpy(message,"bye bye");
+	set_message(message);
+	ecriture_s(ta_socket);
+	break;
+    }
+  }
+  else {
+  while (lecture("menu.txt")) {
+    ecriture_s(ta_socket);
+  }
+
+  }
+  }
+
+
   //fermeture des connexions
   close(ta_socket);
-
 }
 
 int main(int argc,int **argv) {
-char *message, reponse_server[2000];
+char *message, reponse_server[TLIM];
 
 //socket plus structure client
 int ta_socket;
@@ -108,21 +157,9 @@ def_serveur(&server);
 int ma_socket = init_serveur(&server);
 
 int i;
-int pid;
 
 //un peu fragile comme construction mais bon ca fait bcp de notions d'un coups
-for (i=5;i>0;i--) {
-  pid = creation_canal(ma_socket,&ta_socket,&client);
-  if (pid == 0) {
-    lancement_service(ma_socket,ta_socket,&client);
-  }
-}
-if (pid>0) {
-  wait(0);
+  creation_canal(ma_socket,&ta_socket,&client);
+  lancement_service(ta_socket);
   close(ma_socket);
-}
-
-
-
-
 }

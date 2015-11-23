@@ -1,6 +1,7 @@
 #ifndef MA_GESTION
 #define MA_GESTION
-int set_message(char message[256]);
+#define TLIM 150
+int set_message(char message[TLIM]);
 char* get_message();
 #endif
 

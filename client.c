@@ -4,11 +4,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include "gestion_message.h"
 //quasi copier/coller de http://www.binarytides.com/socket-programming-c-linux-tutorial/
 int main (int argc, char *argv[]) {
 int ma_socket;
 struct sockaddr_in server;
-char *message, reponse_server[2000];
+char *message, reponse_server[TLIM];
 
 //definition de la cible
 server.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -43,15 +44,29 @@ if (send(ma_socket , message, strlen(message) , 0) < 0)
   return 1;
 
 }
-puts("envoie reussi\n");
 
 //reception du resultat de la requete
 
 int n;
-while ((n=read(ma_socket, reponse_server, 2000))>0) {
-  //printf("lu : %d\n",n);
+int c;
+c=1;
+while ((int)c!=4) {
+  if ((n=read(ma_socket, reponse_server, TLIM))>0) {
+  printf("lu : %d\n",n);
 write(1,reponse_server,n);
+  printf("lu : %d\n",n);
+  }
+  if (n<TLIM) {
+printf("choix : ");
+scanf("%1s",&message);
+send(ma_socket , &message, 1 , 0);
+sscanf(message,"%1c",&c);
+printf("---->%1c\n",c);
+clean_stdin();
+
+  }
 }
+
 
 close(ma_socket);
 
