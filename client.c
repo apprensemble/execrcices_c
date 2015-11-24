@@ -51,27 +51,20 @@ if (send(ma_socket , message, strlen(message) , 0) < 0)
 int n;
 int c;
 c=1;
-while (message!="4") {
-  printf("debut d'iteration, %s",message);
+while (strcmp(message,"4")) {
   if ((n=read(ma_socket, reponse_server, TLIM))>0) {
-  printf("lu : %d\n",n);
 write(1,reponse_server,n);
-  printf("lu : %d\n",n);
   }
   if (n<TLIM && n>0) {
 printf("choix : ");
 scanf("%1s",&message);
-printf("envoi : %s\n",message);
 send(ma_socket , &message, TLIM , 0);
-printf("envoye %s\n",message);
 clean_stdin();
-printf("envoye %s\n",message);
 
   }
   else {
     printf("long message\n");
   }
-  printf("fin d'iteration\n");
 }
 close(ma_socket);
 

@@ -98,21 +98,15 @@ int lancement_service(int ta_socket) {
   }
   while (choix) {
   lecture_s(ta_socket);
-  printf("1 tour\n");
   sleep(1);
   if (sscanf(get_message(),"%d",&choix)>0) {
-    printf("apres sscanf\n");
     switch(choix) {
       case 1 : 
-	printf("choix 1\n");
 	while (liste_fichiers("refs")) {
-	  printf("liste_f en cours\n");
 	  ecriture_s(ta_socket);
-	  printf("ecriture vers socket\n");
 	}
 	break;
       case 2 : 
-	printf("choix 2\n");
 	strcpy(message,"quel referentiel? ");
 	set_message(message);
 	ecriture_s(ta_socket);
@@ -126,20 +120,17 @@ int lancement_service(int ta_socket) {
 	}
 	break;
       case 3 :
-	printf("choix 3\n");
 	strcpy(message,"virus LOADED!!!");
 	set_message(message);
 	ecriture_s(ta_socket);
 	break;
       case 4 : 
-	printf("choix 4\n");
 	choix = 0;
 	strcpy(message,"ne me quittes pas...");
 	set_message(message);
 	ecriture_s(ta_socket);
 	break;
       default :
-	printf("choix d\n");
 	printf("je n'ai pas reconnu le choix\n");
 	strcpy(message,"je ne comprends pas...");
 	set_message(message);
