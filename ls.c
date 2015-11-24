@@ -43,7 +43,7 @@ int liste_fichiers(char *rep) {
   }
   if ((dp = readdir(dir_fd)) != NULL) {
     if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0) {
-      set_message("");
+      set_message("\0");
       return 1;
 
     }
@@ -57,7 +57,7 @@ int liste_fichiers(char *rep) {
     }
   }
   else {
-    dir_fd == NULL;
+    dir_fd = NULL;
     return 0;
   }
   return 1;

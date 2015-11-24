@@ -9,7 +9,8 @@
 int main (int argc, char *argv[]) {
 int ma_socket;
 struct sockaddr_in server;
-char *message, reponse_server[TLIM];
+char message[TLIM], reponse_server[TLIM];
+strcpy(reponse_server,"");
 
 //definition de la cible
 server.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -35,9 +36,9 @@ return 1;
 puts("connexion active");
 //envoie d'une requete HTTP GET
 if (argv[1] == NULL) {
-  message = "JAMES KIRK";
+  strcpy(message,"JAMES KIRK");
 }
-  else message=argv[1];
+  else strcpy(message,argv[1]);
 if (send(ma_socket , message, strlen(message) , 0) < 0)
 {
   puts ("echec envoie");
@@ -50,26 +51,29 @@ if (send(ma_socket , message, strlen(message) , 0) < 0)
 int n;
 int c;
 c=1;
-while ((int)c!=4) {
+while (message!="4") {
+  printf("debut d'iteration, %s",message);
   if ((n=read(ma_socket, reponse_server, TLIM))>0) {
   printf("lu : %d\n",n);
 write(1,reponse_server,n);
   printf("lu : %d\n",n);
   }
-  if (n<TLIM) {
+  if (n<TLIM && n>0) {
 printf("choix : ");
 scanf("%1s",&message);
-send(ma_socket , &message, 1 , 0);
-sscanf(message,"%1c",&c);
-printf("---->%1c\n",c);
+printf("envoi : %s\n",message);
+send(ma_socket , &message, TLIM , 0);
+printf("envoye %s\n",message);
 clean_stdin();
+printf("envoye %s\n",message);
 
   }
+  else {
+    printf("long message\n");
+  }
+  printf("fin d'iteration\n");
 }
-
-
 close(ma_socket);
 
 return 0;
-
 }
