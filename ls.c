@@ -8,9 +8,12 @@ int lecture(char *nom_de_fichier) {
   char message[TLIM]="";
 
   if (fd==-1) {
-    if ((fd = open(nom_de_fichier,O_RDONLY,0)) == -1)
+    if ((fd = open(nom_de_fichier,O_RDONLY,0)) == -1) {
       perror("le fichier n'a pu etre ouvert");
-
+      strcpy(message,"le fichier n'a pu etre ouvert\n");
+      set_message(message);
+      return -1;
+    }
   }
 
   if ((n = read(fd,tampax,TLIM)) > 0) {

@@ -1,7 +1,5 @@
-menu :
-
-1.liste des referentiels
-2.contenu d'un referentiel
-3.telechargement d'un referentiel
-4.quitter
-
+1. Ravisse l'contenu de ch'dossier
+2. Te voudros quel fichier ?
+3. Armene l'fichier ichi
+4. Allez ch'est fini in rintre
+5. J'voudros bin un tiot conseil
