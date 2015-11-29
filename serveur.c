@@ -100,6 +100,7 @@ int lancement_service(int ta_socket) {
   lecture_s(ta_socket);
   sleep(1);
   if (sscanf(get_message(),"%d",&choix)>0) {
+    n=0;
     switch(choix) {
       case 1 : 
 	while (liste_fichiers("refs")) {
@@ -113,26 +114,30 @@ int lancement_service(int ta_socket) {
 	lecture_s(ta_socket);
 	if (sscanf(get_message(),"%s",&message)>0) {
 	chdir("refs");
-	while (lecture(message)) {
+	while ((n=lecture(message))==1) {
 	  ecriture_s(ta_socket);
 	}
+	if (n<0) ecriture_s(ta_socket);
 	chdir("..");
+	}
+	else {
+	  ecriture_s(ta_socket);
 	}
 	break;
       case 3 :
-	strcpy(message,"virus LOADED!!!");
+	strcpy(message,"virus LOADED!!!\n");
 	set_message(message);
 	ecriture_s(ta_socket);
 	break;
       case 4 : 
 	choix = 0;
-	strcpy(message,"ne me quittes pas...");
+	strcpy(message,"ne me quittes pas...\n");
 	set_message(message);
 	ecriture_s(ta_socket);
 	break;
       default :
 	printf("je n'ai pas reconnu le choix\n");
-	strcpy(message,"je ne comprends pas...");
+	strcpy(message,"je ne comprends pas...\n");
 	set_message(message);
 	ecriture_s(ta_socket);
 	break;

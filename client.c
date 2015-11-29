@@ -57,13 +57,13 @@ write(1,reponse_server,n);
   }
   if (n<TLIM && n>0) {
 printf("choix : ");
-scanf("%1s",&message);
+scanf("%s",&message);
 send(ma_socket , &message, TLIM , 0);
 clean_stdin();
 
   }
   else {
-    printf("long message\n");
+    //printf("long message\n");
   }
 }
 close(ma_socket);
