@@ -13,7 +13,8 @@ char message[TLIM], reponse_server[TLIM];
 strcpy(reponse_server,"");
 
 //definition de la cible
-server.sin_addr.s_addr = inet_addr("172.17.0.37");
+//server.sin_addr.s_addr = inet_addr("172.17.0.37");
+server.sin_addr.s_addr = inet_addr("127.0.0.1");
 server.sin_family = AF_INET;
 server.sin_port = htons(2080);
 

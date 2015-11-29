@@ -1,7 +1,7 @@
 ##Makefile de debutant
 
 serveur : gestion_message.o ls.o menu.o serveur.c client
-	gcc serveur.c -g -o serveur menu.o ls.o gestion_message.o
+	gcc -pthread serveur.c -g -o serveur menu.o ls.o gestion_message.o
 menu.o : menu.c menu.h
 	gcc -c -O3 menu.c
 ls.o : ls.c ls.h

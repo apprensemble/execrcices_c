@@ -82,7 +82,9 @@ int lecture_s(int ta_socket) {
 }
 
 //c'est le vrai main. le coeur du service
-int lancement_service(int ta_socket) {
+void lancement_service(void* t_socket) {
+  int ta_socket = *(int*) t_socket;
+  
   int n;
   int choix;
   choix = 1;
@@ -154,7 +156,6 @@ int lancement_service(int ta_socket) {
 
   //fermeture des connexions
   close(ta_socket);
-  return 0;
 }
 
 int main(int argc,int **argv) {
@@ -170,9 +171,14 @@ def_serveur(&server);
 int ma_socket = init_serveur(&server);
 
 int i;
-
+i=0;
 //un peu fragile comme construction mais bon ca fait bcp de notions d'un coups
-  creation_canal(ma_socket,&ta_socket,&client);
-  lancement_service(ta_socket);
+pthread_t thread[5];
+while(creation_canal(ma_socket,&ta_socket,&client)) {
+ pthread_create(&thread[i++], NULL, lancement_service, (void*)&ta_socket);
+}
+for (i=0;i<5;i++) {
+  pthread_join(thread[i]);
+}
   close(ma_socket);
 }
