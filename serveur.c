@@ -17,6 +17,8 @@
 #include "ls.h"
 #include "gestion_message.h"
 
+pthread_mutex_t lock;
+
 //definition du serveur (cad adresse/port d'ecoute)
 int def_serveur(struct sockaddr_in *server) {
 
@@ -47,7 +49,7 @@ if (bind(ma_socket,(struct sockaddr *) server,sizeof *server) <0) {
   exit(errno);
 }
 
-//on accepte une file de 5
+//on accepte une file de 5(5 ou 1 je ne vois pas la diff)
 if(listen(ma_socket,5)<0) {
   perror("can't listen, je suis sourd\n");
   exit(errno);
@@ -82,8 +84,8 @@ int lecture_s(int ta_socket) {
 }
 
 //c'est le vrai main. le coeur du service
-void lancement_service(void* t_socket) {
-  int ta_socket = *(int*) t_socket;
+void lancement_service(int ta_socket) {
+  //int ta_socket = *(int*) t_socket;
   
   int n;
   int choix;
@@ -161,10 +163,12 @@ void lancement_service(void* t_socket) {
 
 int main(int argc,int **argv) {
 char *message, reponse_server[TLIM];
+if (pthread_mutex_init(&lock,NULL)!=0) {
+  perror("echec de la creation du lock \n");
+  exit(1);
 
-//socket plus structure client
-int ta_socket;
-struct sockaddr_in client;
+}
+
 
 //tout en un cote serveur
 struct sockaddr_in server;
@@ -174,12 +178,32 @@ int ma_socket = init_serveur(&server);
 int i;
 i=0;
 //un peu fragile comme construction mais bon ca fait bcp de notions d'un coups
+void connexion_individuelle(void* m_socket) {
+  //cree un canal puis lance le service grace a ma_socket
+
+
+  pthread_mutex_lock(&lock);
+  int ma_socket = *(int*) m_socket;
+  int ta_socket;
+  struct sockaddr_in client;
+int id;
+id = pthread_self();
+  printf("threadid : %d \n",id);
+  creation_canal(ma_socket,&ta_socket,&client);
+  //close(ma_socket);
+  pthread_mutex_unlock(&lock);
+  lancement_service(ta_socket);
+  
+
+}
 pthread_t thread[5];
-while(creation_canal(ma_socket,&ta_socket,&client)) {
- pthread_create(&thread[i++], NULL, lancement_service, (void*)&ta_socket);
+for(i=0;i<5;i++) {
+ pthread_create(&thread[i], NULL, connexion_individuelle, (void*)&ma_socket);
 }
 for (i=0;i<5;i++) {
+  printf("thread %d : %d\n",i,thread[i]);
   pthread_join(thread[i]);
 }
   close(ma_socket);
+  pthread_mutex_destroy(&lock);
 }
