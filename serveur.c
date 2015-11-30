@@ -156,6 +156,7 @@ void lancement_service(void* t_socket) {
 
   //fermeture des connexions
   close(ta_socket);
+  pthread_exit();
 }
 
 int main(int argc,int **argv) {
